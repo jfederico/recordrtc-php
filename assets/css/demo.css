@@ -1,0 +1,62 @@
+    audio {
+      vertical-align: bottom;
+      width: 10em;
+    }
+    
+    video {
+      max-width: 100%;
+      vertical-align: top;
+    }
+    
+    input {
+      border: 1px solid #d9d9d9;
+      border-radius: 1px;
+      font-size: 2em;
+      margin: .2em;
+      width: 30%;
+    }
+    
+    p,
+    .inner {
+      padding: 1em;
+    }
+    
+    li {
+      border-bottom: 1px solid rgb(189, 189, 189);
+      border-left: 1px solid rgb(189, 189, 189);
+      padding: .5em;
+    }
+    
+    label {
+      display: inline-block;
+      width: 8em;
+    }
+    
+    .recordrtc button {
+      font-size: inherit;
+    }
+    
+    .recordrtc button,
+    .recordrtc select {
+      vertical-align: middle;
+      line-height: 1;
+      padding: 2px 5px;
+      height: auto;
+      font-size: inherit;
+      margin: 0;
+    }
+    
+    .recordrtc,
+    .recordrtc .header {
+      display: block;
+      text-align: center;
+      padding-top: 0;
+    }
+    
+    .recordrtc video {
+      width: 70%;
+    }
+    
+    .recordrtc option[disabled] {
+      display: none;
+    }

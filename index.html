@@ -1,0 +1,72 @@
+<!--
+> Muaz Khan     - www.MuazKhan.com
+> MIT License   - www.WebRTC-Experiment.com/licence
+> Documentation - github.com/muaz-khan/RecordRTC
+> and           - RecordRTC.org
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RecordRTC Audio+Video Recording & Uploading to PHP Server</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="author" type="text/html" href="https://plus.google.com/+MuazKhan">
+  <meta name="author" content="Muaz Khan">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/demo.css">
+
+  <script src="assets/js/RecordRTC.js"></script>
+  <script src="assets/js/gif-recorder.js"></script>
+  <script src="assets/js/getScreenId.js"></script>
+
+  <!-- for Edige/FF/Chrome/Opera/etc. getUserMedia support -->
+  <script src="assets/js/gumadapter.js"></script>
+</head>
+
+<body>
+  <article>
+    <header style="text-align: center;">
+      <h1>
+        RecordRTC Audio+Video Recording & Uploading to PHP Server
+      </h1>
+    </header>
+
+    <section class="experiment recordrtc">
+      <h2 class="header">
+        <select class="recording-media">
+          <option value="record-video">Video</option>
+          <option value="record-audio">Audio</option>
+          <option value="record-screen">Screen</option>
+        </select>
+
+        into
+        <select class="media-container-format">
+          <option>WebM</option>
+          <option disabled>Mp4</option>
+          <option disabled>WAV</option>
+          <option disabled>Ogg</option>
+        </select>
+
+        <button>Start Recording</button>
+      </h2>
+
+      <div style="text-align: center; display: none;">
+        <button id="save-to-disk">Save To Disk</button>
+        <button id="open-new-tab">Open New Tab</button>
+        <button id="upload-to-server">Upload To Server</button>
+      </div>
+
+      <br>
+
+      <video controls muted></video>
+    </section>
+
+    <script src="assets/js/demo.js"></script>
+  </article>
+</body>
+
+</html>
