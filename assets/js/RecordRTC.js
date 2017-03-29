@@ -66,7 +66,7 @@ function RecordRTC(mediaStream, config) {
             return self;
         }
 
-        initRecorder(function() {
+        initRecorder(function () {
             if (self.recordingDuration) {
                 handleRecordingDuration();
             }
@@ -77,7 +77,7 @@ function RecordRTC(mediaStream, config) {
 
     function initRecorder(initCallback) {
         if (initCallback) {
-            config.initCallback = function() {
+            config.initCallback = function () {
                 initCallback();
                 initCallback = config.initCallback = null; // recordRTC.initRecorder should be call-backed once.
             };
@@ -105,7 +105,7 @@ function RecordRTC(mediaStream, config) {
 
             self.resumeRecording();
 
-            setTimeout(function() {
+            setTimeout(function () {
                 stopRecording(callback);
             }, 1);
             return;
@@ -168,7 +168,7 @@ function RecordRTC(mediaStream, config) {
                 return;
             }
 
-            getDataURL(function(dataURL) {
+            getDataURL(function (dataURL) {
                 var parameter = {};
                 parameter[config.type + 'Blob'] = dataURL;
                 DiskStorage.Store(parameter);
@@ -235,7 +235,7 @@ function RecordRTC(mediaStream, config) {
                 console.warn('Blob encoder did not finish its job yet.');
             }
 
-            setTimeout(function() {
+            setTimeout(function () {
                 getDataURL(callback, _mediaRecorder);
             }, 1000);
             return;
@@ -244,7 +244,7 @@ function RecordRTC(mediaStream, config) {
         if (typeof Worker !== 'undefined' && !navigator.mozGetUserMedia) {
             var webWorker = processInWebWorker(readFile);
 
-            webWorker.onmessage = function(event) {
+            webWorker.onmessage = function (event) {
                 callback(event.data);
             };
 
@@ -252,7 +252,7 @@ function RecordRTC(mediaStream, config) {
         } else {
             var reader = new FileReader();
             reader.readAsDataURL(blob);
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 callback(event.target.result);
             };
         }
@@ -274,7 +274,7 @@ function RecordRTC(mediaStream, config) {
         counter = counter || 0;
 
         if (self.state === 'paused') {
-            setTimeout(function() {
+            setTimeout(function () {
                 handleRecordingDuration(counter);
             }, 1000);
             return;
@@ -291,7 +291,7 @@ function RecordRTC(mediaStream, config) {
 
         counter += 1000; // 1-second
 
-        setTimeout(function() {
+        setTimeout(function () {
             handleRecordingDuration(counter);
         }, 1000);
     }
@@ -368,7 +368,7 @@ function RecordRTC(mediaStream, config) {
          * @example
          * recordRTC.setRecordingDuration();
          */
-        setRecordingDuration: function(recordingDuration, callback) {
+        setRecordingDuration: function (recordingDuration, callback) {
             if (typeof recordingDuration === 'undefined') {
                 throw 'recordingDuration is required.';
             }
@@ -378,10 +378,10 @@ function RecordRTC(mediaStream, config) {
             }
 
             self.recordingDuration = recordingDuration;
-            self.onRecordingStopped = callback || function() {};
+            self.onRecordingStopped = callback || function () {};
 
             return {
-                onRecordingStopped: function(callback) {
+                onRecordingStopped: function (callback) {
                     self.onRecordingStopped = callback;
                 }
             };
@@ -395,7 +395,7 @@ function RecordRTC(mediaStream, config) {
          * @example
          * recordRTC.clearRecordedData();
          */
-        clearRecordedData: function() {
+        clearRecordedData: function () {
             if (!mediaRecorder) {
                 return console.warn(WARNING);
             }
@@ -420,7 +420,7 @@ function RecordRTC(mediaStream, config) {
          *     var blob = recordRTC.blob;
          * });
          */
-        getBlob: function() {
+        getBlob: function () {
             if (!mediaRecorder) {
                 return console.warn(WARNING);
             }
@@ -453,7 +453,7 @@ function RecordRTC(mediaStream, config) {
          *     video.src = recordRTC.toURL();
          * });
          */
-        toURL: function() {
+        toURL: function () {
             if (!mediaRecorder) {
                 return console.warn(WARNING);
             }
@@ -469,7 +469,7 @@ function RecordRTC(mediaStream, config) {
          * @example
          * recordRTC.addStream(MediaStream);
          */
-        addStream: function(stream) {
+        addStream: function (stream) {
             if (!mediaRecorder) {
                 return console.warn(WARNING);
             }
@@ -489,7 +489,7 @@ function RecordRTC(mediaStream, config) {
          *     recordRTC.save('file-name');
          * });
          */
-        save: function(fileName) {
+        save: function (fileName) {
             if (!mediaRecorder) {
                 return console.warn(WARNING);
             }
@@ -507,7 +507,7 @@ function RecordRTC(mediaStream, config) {
          *     video.src = dataURL;
          * });
          */
-        getFromDisk: function(callback) {
+        getFromDisk: function (callback) {
             if (!mediaRecorder) {
                 return console.warn(WARNING);
             }
@@ -530,7 +530,7 @@ function RecordRTC(mediaStream, config) {
          * });
          * recordRTC.setAdvertisementArray(arrayOfWebPImages);
          */
-        setAdvertisementArray: function(arrayOfWebPImages) {
+        setAdvertisementArray: function (arrayOfWebPImages) {
             config.advertisement = [];
 
             var length = arrayOfWebPImages.length;
@@ -614,7 +614,7 @@ function RecordRTC(mediaStream, config) {
          * recordRTC.reset();
          * recordRTC.startRecording();
          */
-        reset: function() {
+        reset: function () {
             mediaRecorder = null;
             setState('inactive');
             self.blob = null;
@@ -630,7 +630,7 @@ function RecordRTC(mediaStream, config) {
          *     console.log('Recorder state: ', state);
          * };
          */
-        onStateChanged: function(state) {
+        onStateChanged: function (state) {
             if (!config.disableLogs) {
                 console.info('Recorder state changed:', state);
             }
@@ -675,13 +675,13 @@ function RecordRTC(mediaStream, config) {
  *     if(type === 'gif')   { }
  * });
  */
-RecordRTC.getFromDisk = function(type, callback) {
+RecordRTC.getFromDisk = function (type, callback) {
     if (!callback) {
         throw 'callback is mandatory.';
     }
 
     console.log('Getting recorded ' + (type === 'all' ? 'blobs' : type + ' blob ') + ' from disk!');
-    DiskStorage.Fetch(function(dataURL, _type) {
+    DiskStorage.Fetch(function (dataURL, _type) {
         if (type !== 'all' && _type === type + 'Blob' && callback) {
             callback(dataURL);
         }
@@ -704,13 +704,13 @@ RecordRTC.getFromDisk = function(type, callback) {
  *     gif  : gifBlob
  * });
  */
-RecordRTC.writeToDisk = function(options) {
+RecordRTC.writeToDisk = function (options) {
     console.log('Writing recorded blob(s) to disk!');
     options = options || {};
     if (options.audio && options.video && options.gif) {
-        options.audio.getDataURL(function(audioDataURL) {
-            options.video.getDataURL(function(videoDataURL) {
-                options.gif.getDataURL(function(gifDataURL) {
+        options.audio.getDataURL(function (audioDataURL) {
+            options.video.getDataURL(function (videoDataURL) {
+                options.gif.getDataURL(function (gifDataURL) {
                     DiskStorage.Store({
                         audioBlob: audioDataURL,
                         videoBlob: videoDataURL,
@@ -720,8 +720,8 @@ RecordRTC.writeToDisk = function(options) {
             });
         });
     } else if (options.audio && options.video) {
-        options.audio.getDataURL(function(audioDataURL) {
-            options.video.getDataURL(function(videoDataURL) {
+        options.audio.getDataURL(function (audioDataURL) {
+            options.video.getDataURL(function (videoDataURL) {
                 DiskStorage.Store({
                     audioBlob: audioDataURL,
                     videoBlob: videoDataURL
@@ -729,8 +729,8 @@ RecordRTC.writeToDisk = function(options) {
             });
         });
     } else if (options.audio && options.gif) {
-        options.audio.getDataURL(function(audioDataURL) {
-            options.gif.getDataURL(function(gifDataURL) {
+        options.audio.getDataURL(function (audioDataURL) {
+            options.gif.getDataURL(function (gifDataURL) {
                 DiskStorage.Store({
                     audioBlob: audioDataURL,
                     gifBlob: gifDataURL
@@ -738,8 +738,8 @@ RecordRTC.writeToDisk = function(options) {
             });
         });
     } else if (options.video && options.gif) {
-        options.video.getDataURL(function(videoDataURL) {
-            options.gif.getDataURL(function(gifDataURL) {
+        options.video.getDataURL(function (videoDataURL) {
+            options.gif.getDataURL(function (gifDataURL) {
                 DiskStorage.Store({
                     videoBlob: videoDataURL,
                     gifBlob: gifDataURL
@@ -747,19 +747,19 @@ RecordRTC.writeToDisk = function(options) {
             });
         });
     } else if (options.audio) {
-        options.audio.getDataURL(function(audioDataURL) {
+        options.audio.getDataURL(function (audioDataURL) {
             DiskStorage.Store({
                 audioBlob: audioDataURL
             });
         });
     } else if (options.video) {
-        options.video.getDataURL(function(videoDataURL) {
+        options.video.getDataURL(function (videoDataURL) {
             DiskStorage.Store({
                 videoBlob: videoDataURL
             });
         });
     } else if (options.gif) {
-        options.gif.getDataURL(function(gifDataURL) {
+        options.gif.getDataURL(function (gifDataURL) {
             DiskStorage.Store({
                 gifBlob: gifDataURL
             });
@@ -772,7 +772,7 @@ if (typeof module !== 'undefined' /* && !!module.exports*/ ) {
 }
 
 if (typeof define === 'function' && define.amd) {
-    define('RecordRTC', [], function() {
+    define('RecordRTC', [], function () {
         return RecordRTC;
     });
 }
@@ -962,7 +962,7 @@ function MRecordRTC(mediaStream) {
      * @example
      * recorder.addStream(MediaStream);
      */
-    this.addStream = function(_mediaStream) {
+    this.addStream = function (_mediaStream) {
         if (_mediaStream) {
             mediaStream = _mediaStream;
         }
@@ -992,7 +992,7 @@ function MRecordRTC(mediaStream) {
      * @example
      * recorder.startRecording();
      */
-    this.startRecording = function() {
+    this.startRecording = function () {
         var mediaType = this.mediaType;
         var recorderType;
         var mimeType = this.mimeType || {
@@ -1083,8 +1083,8 @@ function MRecordRTC(mediaStream) {
                 self.audioRecorder = null;
                 self.videoRecorder.startRecording();
             } else {
-                self.videoRecorder.initRecorder(function() {
-                    self.audioRecorder.initRecorder(function() {
+                self.videoRecorder.initRecorder(function () {
+                    self.audioRecorder.initRecorder(function () {
                         // Both recorders are ready to record things accurately
                         self.videoRecorder.startRecording();
                         self.audioRecorder.startRecording();
@@ -1122,23 +1122,23 @@ function MRecordRTC(mediaStream) {
      *     var gifBlob   = recording.gif;
      * });
      */
-    this.stopRecording = function(callback) {
-        callback = callback || function() {};
+    this.stopRecording = function (callback) {
+        callback = callback || function () {};
 
         if (this.audioRecorder) {
-            this.audioRecorder.stopRecording(function(blobURL) {
+            this.audioRecorder.stopRecording(function (blobURL) {
                 callback(blobURL, 'audio');
             });
         }
 
         if (this.videoRecorder) {
-            this.videoRecorder.stopRecording(function(blobURL) {
+            this.videoRecorder.stopRecording(function (blobURL) {
                 callback(blobURL, 'video');
             });
         }
 
         if (this.gifRecorder) {
-            this.gifRecorder.stopRecording(function(blobURL) {
+            this.gifRecorder.stopRecording(function (blobURL) {
                 callback(blobURL, 'gif');
             });
         }
@@ -1151,7 +1151,7 @@ function MRecordRTC(mediaStream) {
      * @example
      * recorder.pauseRecording();
      */
-    this.pauseRecording = function() {
+    this.pauseRecording = function () {
         if (this.audioRecorder) {
             this.audioRecorder.pauseRecording();
         }
@@ -1172,7 +1172,7 @@ function MRecordRTC(mediaStream) {
      * @example
      * recorder.resumeRecording();
      */
-    this.resumeRecording = function() {
+    this.resumeRecording = function () {
         if (this.audioRecorder) {
             this.audioRecorder.resumeRecording();
         }
@@ -1201,7 +1201,7 @@ function MRecordRTC(mediaStream) {
      * var audioBlob = recorder.getBlob().audio;
      * var videoBlob = recorder.getBlob().video;
      */
-    this.getBlob = function(callback) {
+    this.getBlob = function (callback) {
         var output = {};
 
         if (this.audioRecorder) {
@@ -1235,11 +1235,11 @@ function MRecordRTC(mediaStream) {
      *     var gifDataURL   = recording.gif;
      * });
      */
-    this.getDataURL = function(callback) {
-        this.getBlob(function(blob) {
+    this.getDataURL = function (callback) {
+        this.getBlob(function (blob) {
             if (blob.audio && blob.video) {
-                getDataURL(blob.audio, function(_audioDataURL) {
-                    getDataURL(blob.video, function(_videoDataURL) {
+                getDataURL(blob.audio, function (_audioDataURL) {
+                    getDataURL(blob.video, function (_videoDataURL) {
                         callback({
                             audio: _audioDataURL,
                             video: _videoDataURL
@@ -1247,13 +1247,13 @@ function MRecordRTC(mediaStream) {
                     });
                 });
             } else if (blob.audio) {
-                getDataURL(blob.audio, function(_audioDataURL) {
+                getDataURL(blob.audio, function (_audioDataURL) {
                     callback({
                         audio: _audioDataURL
                     });
                 });
             } else if (blob.video) {
-                getDataURL(blob.video, function(_videoDataURL) {
+                getDataURL(blob.video, function (_videoDataURL) {
                     callback({
                         video: _videoDataURL
                     });
@@ -1267,7 +1267,7 @@ function MRecordRTC(mediaStream) {
                     postMessage(new FileReaderSync().readAsDataURL(_blob));
                 });
 
-                webWorker.onmessage = function(event) {
+                webWorker.onmessage = function (event) {
                     callback00(event.data);
                 };
 
@@ -1275,7 +1275,7 @@ function MRecordRTC(mediaStream) {
             } else {
                 var reader = new FileReader();
                 reader.readAsDataURL(blob);
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     callback00(event.target.result);
                 };
             }
@@ -1309,7 +1309,7 @@ function MRecordRTC(mediaStream) {
      * @example
      * recorder.writeToDisk();
      */
-    this.writeToDisk = function() {
+    this.writeToDisk = function () {
         RecordRTC.writeToDisk({
             audio: this.audioRecorder,
             video: this.videoRecorder,
@@ -1329,7 +1329,7 @@ function MRecordRTC(mediaStream) {
      *     gif  : 'gif-file-name'
      * });
      */
-    this.save = function(args) {
+    this.save = function (args) {
         args = args || {
             audio: true,
             video: true,
@@ -1384,7 +1384,7 @@ if (typeof RecordRTC !== 'undefined') {
 
 var browserFakeUserAgent = 'Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko) Fake/12.3.4567.89 Fake/123.45';
 
-(function(that) {
+(function (that) {
     if (!that) {
         return;
     }
@@ -1399,7 +1399,7 @@ var browserFakeUserAgent = 'Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko
 
     global.navigator = {
         userAgent: browserFakeUserAgent,
-        getUserMedia: function() {}
+        getUserMedia: function () {}
     };
 
     if (!global.console) {
@@ -1407,7 +1407,7 @@ var browserFakeUserAgent = 'Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko
     }
 
     if (typeof global.console.debug === 'undefined') {
-        global.console.debug = global.console.info = global.console.error = global.console.log = global.console.log || function() {
+        global.console.debug = global.console.info = global.console.error = global.console.log = global.console.log || function () {
             console.log(arguments);
         };
     }
@@ -1416,22 +1416,22 @@ var browserFakeUserAgent = 'Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko
         /*global document:true */
         that.document = {};
 
-        document.createElement = document.captureStream = document.mozCaptureStream = function() {
+        document.createElement = document.captureStream = document.mozCaptureStream = function () {
             var obj = {
-                getContext: function() {
+                getContext: function () {
                     return obj;
                 },
-                play: function() {},
-                pause: function() {},
-                drawImage: function() {},
-                toDataURL: function() {
+                play: function () {},
+                pause: function () {},
+                drawImage: function () {},
+                toDataURL: function () {
                     return '';
                 }
             };
             return obj;
         };
 
-        that.HTMLVideoElement = function() {};
+        that.HTMLVideoElement = function () {};
     }
 
     if (typeof location === 'undefined') {
@@ -1454,10 +1454,10 @@ var browserFakeUserAgent = 'Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko
     if (typeof URL === 'undefined') {
         /*global screen:true */
         that.URL = {
-            createObjectURL: function() {
+            createObjectURL: function () {
                 return '';
             },
-            revokeObjectURL: function() {
+            revokeObjectURL: function () {
                 return '';
             }
         };
@@ -1489,10 +1489,10 @@ if (typeof requestAnimationFrame === 'undefined') {
         var lastTime = 0;
 
         /*global requestAnimationFrame:true */
-        requestAnimationFrame = function(callback, element) {
+        requestAnimationFrame = function (callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = setTimeout(function() {
+            var id = setTimeout(function () {
                 callback(currTime + timeToCall);
             }, timeToCall);
             lastTime = currTime + timeToCall;
@@ -1515,7 +1515,7 @@ if (typeof cancelAnimationFrame === 'undefined') {
         cancelAnimationFrame = msCancelAnimationFrame;
     } else if (typeof cancelAnimationFrame === 'undefined') {
         /*global cancelAnimationFrame:true */
-        cancelAnimationFrame = function(id) {
+        cancelAnimationFrame = function (id) {
             clearTimeout(id);
         };
     }
@@ -1567,13 +1567,13 @@ if (typeof MediaStream === 'undefined' && typeof webkitMediaStream !== 'undefine
 /*global MediaStream:true */
 if (typeof MediaStream !== 'undefined') {
     if (!('getVideoTracks' in MediaStream.prototype)) {
-        MediaStream.prototype.getVideoTracks = function() {
+        MediaStream.prototype.getVideoTracks = function () {
             if (!this.getTracks) {
                 return [];
             }
 
             var tracks = [];
-            this.getTracks.forEach(function(track) {
+            this.getTracks.forEach(function (track) {
                 if (track.kind.toString().indexOf('video') !== -1) {
                     tracks.push(track);
                 }
@@ -1581,13 +1581,13 @@ if (typeof MediaStream !== 'undefined') {
             return tracks;
         };
 
-        MediaStream.prototype.getAudioTracks = function() {
+        MediaStream.prototype.getAudioTracks = function () {
             if (!this.getTracks) {
                 return [];
             }
 
             var tracks = [];
-            this.getTracks.forEach(function(track) {
+            this.getTracks.forEach(function (track) {
                 if (track.kind.toString().indexOf('audio') !== -1) {
                     tracks.push(track);
                 }
@@ -1597,14 +1597,14 @@ if (typeof MediaStream !== 'undefined') {
     }
 
     if (!('stop' in MediaStream.prototype)) {
-        MediaStream.prototype.stop = function() {
-            this.getAudioTracks().forEach(function(track) {
+        MediaStream.prototype.stop = function () {
+            this.getAudioTracks().forEach(function (track) {
                 if (!!track.stop) {
                     track.stop();
                 }
             });
 
-            this.getVideoTracks().forEach(function(track) {
+            this.getVideoTracks().forEach(function (track) {
                 if (!!track.stop) {
                     track.stop();
                 }
@@ -1671,7 +1671,7 @@ function invokeSaveAsDialog(file, fileName) {
     hyperlink.download = fileFullName;
 
     if (!!navigator.mozGetUserMedia) {
-        hyperlink.onclick = function() {
+        hyperlink.onclick = function () {
             (document.body || document.documentElement).removeChild(hyperlink);
         };
         (document.body || document.documentElement).appendChild(hyperlink);
@@ -1834,7 +1834,7 @@ function MediaStreamRecorder(mediaStream, config) {
      * @example
      * recorder.record();
      */
-    this.record = function() {
+    this.record = function () {
         self.blob = null;
 
         var recorderHints = config;
@@ -1881,12 +1881,12 @@ function MediaStreamRecorder(mediaStream, config) {
             }
         }
 
-        // i.e. stop recording when <video> is paused by the user; and auto restart recording 
+        // i.e. stop recording when <video> is paused by the user; and auto restart recording
         // when video is resumed. E.g. yourStream.getVideoTracks()[0].muted = true; // it will auto-stop recording.
         mediaRecorder.ignoreMutedMedia = config.ignoreMutedMedia || false;
 
         // Dispatching OnDataAvailable Handler
-        mediaRecorder.ondataavailable = function(e) {
+        mediaRecorder.ondataavailable = function (e) {
             if (self.dontFireOnDataAvailableEvent) {
                 return;
             }
@@ -1921,7 +1921,7 @@ function MediaStreamRecorder(mediaStream, config) {
             }
         };
 
-        mediaRecorder.onerror = function(error) {
+        mediaRecorder.onerror = function (error) {
             if (!config.disableLogs) {
                 if (error.name === 'InvalidState') {
                     console.error('The MediaRecorder is not in a state in which the proposed operation is allowed to be executed.');
@@ -1938,7 +1938,7 @@ function MediaStreamRecorder(mediaStream, config) {
                 }
             }
 
-            (function(looper) {
+            (function (looper) {
                 if (!self.manuallyStopped && mediaRecorder && mediaRecorder.state === 'inactive') {
                     // 10 minutes, enough?
                     mediaRecorder.start(10 * 60 * 1000);
@@ -1948,10 +1948,10 @@ function MediaStreamRecorder(mediaStream, config) {
                 setTimeout(looper, 1000);
             })();
 
-            // When the stream is "ended" set recording to 'inactive' 
-            // and stop gathering data. Callers should not rely on 
-            // exactness of the timeSlice value, especially 
-            // if the timeSlice value is small. Callers should 
+            // When the stream is "ended" set recording to 'inactive'
+            // and stop gathering data. Callers should not rely on
+            // exactness of the timeSlice value, especially
+            // if the timeSlice value is small. Callers should
             // consider timeSlice as a minimum value
 
             if (mediaRecorder.state !== 'inactive' && mediaRecorder.state !== 'stopped') {
@@ -1989,14 +1989,14 @@ function MediaStreamRecorder(mediaStream, config) {
      *     video.src = URL.createObjectURL(blob);
      * });
      */
-    this.stop = function(callback) {
+    this.stop = function (callback) {
         self.manuallyStopped = true; // used inside the mediaRecorder.onerror
 
         if (!mediaRecorder) {
             return;
         }
 
-        this.recordingCallback = function(blob) {
+        this.recordingCallback = function (blob) {
             mediaRecorder = null;
 
             if (callback) {
@@ -2021,7 +2021,7 @@ function MediaStreamRecorder(mediaStream, config) {
      * @example
      * recorder.pause();
      */
-    this.pause = function() {
+    this.pause = function () {
         if (!mediaRecorder) {
             return;
         }
@@ -2038,7 +2038,7 @@ function MediaStreamRecorder(mediaStream, config) {
      * @example
      * recorder.resume();
      */
-    this.resume = function() {
+    this.resume = function () {
         if (this.dontFireOnDataAvailableEvent) {
             this.dontFireOnDataAvailableEvent = false;
 
@@ -2065,7 +2065,7 @@ function MediaStreamRecorder(mediaStream, config) {
      * @example
      * recorder.clearRecordedData();
      */
-    this.clearRecordedData = function() {
+    this.clearRecordedData = function () {
         if (!mediaRecorder) {
             return;
         }
@@ -2194,7 +2194,7 @@ function StereoAudioRecorder(mediaStream, config) {
      * @example
      * recorder.record();
      */
-    this.record = function() {
+    this.record = function () {
         if (isMediaStreamActive() === false) {
             throw 'Please make sure MediaStream is active.';
         }
@@ -2289,20 +2289,20 @@ function StereoAudioRecorder(mediaStream, config) {
 
             var view = new DataView(buffer);
 
-            // RIFF chunk descriptor/identifier 
+            // RIFF chunk descriptor/identifier
             writeUTFBytes(view, 0, 'RIFF');
 
             // RIFF chunk length
             view.setUint32(4, 44 + interleavedLength * 2, true);
 
-            // RIFF type 
+            // RIFF type
             writeUTFBytes(view, 8, 'WAVE');
 
-            // format chunk identifier 
+            // format chunk identifier
             // FMT sub-chunk
             writeUTFBytes(view, 12, 'fmt ');
 
-            // format chunk length 
+            // format chunk length
             view.setUint32(16, 16, true);
 
             // sample format (raw)
@@ -2311,23 +2311,23 @@ function StereoAudioRecorder(mediaStream, config) {
             // stereo (2 channels)
             view.setUint16(22, numberOfAudioChannels, true);
 
-            // sample rate 
+            // sample rate
             view.setUint32(24, sampleRate, true);
 
             // byte rate (sample rate * block align)
             view.setUint32(28, sampleRate * 2, true);
 
-            // block align (channel count * bytes per sample) 
+            // block align (channel count * bytes per sample)
             view.setUint16(32, numberOfAudioChannels * 2, true);
 
-            // bits per sample 
+            // bits per sample
             view.setUint16(34, 16, true);
 
             // data sub-chunk
-            // data chunk identifier 
+            // data chunk identifier
             writeUTFBytes(view, 36, 'data');
 
-            // data chunk length 
+            // data chunk length
             view.setUint32(40, interleavedLength * 2, true);
 
             // write the PCM samples
@@ -2354,7 +2354,7 @@ function StereoAudioRecorder(mediaStream, config) {
 
         if (!isChrome) {
             // its Microsoft Edge
-            mergeAudioBuffers(config, function(data) {
+            mergeAudioBuffers(config, function (data) {
                 callback(data.buffer, data.view);
             });
             return;
@@ -2363,7 +2363,7 @@ function StereoAudioRecorder(mediaStream, config) {
 
         var webWorker = processInWebWorker(mergeAudioBuffers);
 
-        webWorker.onmessage = function(event) {
+        webWorker.onmessage = function (event) {
             callback(event.data.buffer, event.data.view);
 
             // release memory
@@ -2395,7 +2395,7 @@ function StereoAudioRecorder(mediaStream, config) {
      *     video.src = URL.createObjectURL(blob);
      * });
      */
-    this.stop = function(callback) {
+    this.stop = function (callback) {
         // stop recording
         recording = false;
 
@@ -2408,7 +2408,7 @@ function StereoAudioRecorder(mediaStream, config) {
             internalInterleavedLength: recordingLength,
             leftBuffers: leftchannel,
             rightBuffers: numberOfAudioChannels === 1 ? [] : rightchannel
-        }, function(buffer, view) {
+        }, function (buffer, view) {
             /**
              * @property {Blob} blob - The recorded blob object.
              * @memberof StereoAudioRecorder
@@ -2545,7 +2545,7 @@ function StereoAudioRecorder(mediaStream, config) {
      * @example
      * recorder.pause();
      */
-    this.pause = function() {
+    this.pause = function () {
         isPaused = true;
     };
 
@@ -2556,7 +2556,7 @@ function StereoAudioRecorder(mediaStream, config) {
      * @example
      * recorder.resume();
      */
-    this.resume = function() {
+    this.resume = function () {
         if (isMediaStreamActive() === false) {
             throw 'Please make sure MediaStream is active.';
         }
@@ -2579,7 +2579,7 @@ function StereoAudioRecorder(mediaStream, config) {
      * @example
      * recorder.clearRecordedData();
      */
-    this.clearRecordedData = function() {
+    this.clearRecordedData = function () {
         this.pause();
 
         leftchannel.length = rightchannel.length = 0;
@@ -2680,7 +2680,7 @@ function CanvasRecorder(htmlElement, config) {
 
     // via DetectRTC.js
     var isCanvasSupportsStreamCapturing = false;
-    ['captureStream', 'mozCaptureStream', 'webkitCaptureStream'].forEach(function(item) {
+    ['captureStream', 'mozCaptureStream', 'webkitCaptureStream'].forEach(function (item) {
         if (item in document.createElement('canvas')) {
             isCanvasSupportsStreamCapturing = true;
         }
@@ -2727,7 +2727,7 @@ function CanvasRecorder(htmlElement, config) {
      * @example
      * recorder.record();
      */
-    this.record = function() {
+    this.record = function () {
         isRecording = true;
 
         if (isCanvasSupportsStreamCapturing) {
@@ -2751,7 +2751,7 @@ function CanvasRecorder(htmlElement, config) {
                 throw 'captureStream API are NOT available.';
             }
 
-            // Note: Jan 18, 2016 status is that, 
+            // Note: Jan 18, 2016 status is that,
             // Firefox MediaRecorder API can't record CanvasCaptureMediaStream object.
             mediaStreamRecorder = new MediaStreamRecorder(canvasMediaStream, {
                 mimeType: 'video/webm'
@@ -2768,14 +2768,14 @@ function CanvasRecorder(htmlElement, config) {
         }
     };
 
-    this.getWebPImages = function(callback) {
+    this.getWebPImages = function (callback) {
         if (htmlElement.nodeName.toLowerCase() !== 'canvas') {
             callback();
             return;
         }
 
         var framesLength = whammy.frames.length;
-        whammy.frames.forEach(function(frame, idx) {
+        whammy.frames.forEach(function (frame, idx) {
             var framesRemaining = framesLength - idx;
             if (!config.disableLogs) {
                 console.debug(framesRemaining + '/' + framesLength + ' frames remaining');
@@ -2806,7 +2806,7 @@ function CanvasRecorder(htmlElement, config) {
      *     video.src = URL.createObjectURL(blob);
      * });
      */
-    this.stop = function(callback) {
+    this.stop = function (callback) {
         isRecording = false;
 
         var that = this;
@@ -2816,7 +2816,7 @@ function CanvasRecorder(htmlElement, config) {
             return;
         }
 
-        this.getWebPImages(function() {
+        this.getWebPImages(function () {
             /**
              * @property {Blob} blob - Recorded frames in video/webm blob.
              * @memberof CanvasRecorder
@@ -2825,7 +2825,7 @@ function CanvasRecorder(htmlElement, config) {
              *     var blob = recorder.blob;
              * });
              */
-            whammy.compile(function(blob) {
+            whammy.compile(function (blob) {
                 if (!config.disableLogs) {
                     console.debug('Recording finished!');
                 }
@@ -2856,7 +2856,7 @@ function CanvasRecorder(htmlElement, config) {
      * @example
      * recorder.pause();
      */
-    this.pause = function() {
+    this.pause = function () {
         isPausedRecording = true;
 
         if (mediaStreamRecorder instanceof MediaStreamRecorder) {
@@ -2872,7 +2872,7 @@ function CanvasRecorder(htmlElement, config) {
      * @example
      * recorder.resume();
      */
-    this.resume = function() {
+    this.resume = function () {
         isPausedRecording = false;
 
         if (mediaStreamRecorder instanceof MediaStreamRecorder) {
@@ -2892,7 +2892,7 @@ function CanvasRecorder(htmlElement, config) {
      * @example
      * recorder.clearRecordedData();
      */
-    this.clearRecordedData = function() {
+    this.clearRecordedData = function () {
         this.pause();
         whammy.frames = [];
     };
@@ -2937,7 +2937,7 @@ function CanvasRecorder(htmlElement, config) {
 
         html2canvas(htmlElement, {
             grabMouse: typeof config.showMousePointer === 'undefined' || config.showMousePointer,
-            onrendered: function(canvas) {
+            onrendered: function (canvas) {
                 var duration = new Date().getTime() - lastTime;
                 if (!duration) {
                     return setTimeout(drawCanvasFrame, config.frameInterval);
@@ -3007,7 +3007,7 @@ function WhammyRecorder(mediaStream, config) {
      * @example
      * recorder.record();
      */
-    this.record = function() {
+    this.record = function () {
         if (!config.width) {
             config.width = 320;
         }
@@ -3051,7 +3051,7 @@ function WhammyRecorder(mediaStream, config) {
                 video.src = URL.createObjectURL(mediaStream);
             }
 
-            video.onloadedmetadata = function() { // "onloadedmetadata" may NOT work in FF?
+            video.onloadedmetadata = function () { // "onloadedmetadata" may NOT work in FF?
                 if (config.initCallback) {
                     config.initCallback();
                 }
@@ -3124,7 +3124,7 @@ function WhammyRecorder(mediaStream, config) {
             }
 
             // "setTimeout" added by Jim McLeod
-            setTimeout(function() {
+            setTimeout(function () {
                 o.functionToLoop(loop, i);
             }, 1);
         })();
@@ -3166,10 +3166,10 @@ function WhammyRecorder(mediaStream, config) {
 
         asyncLoop({
             length: endCheckFrame,
-            functionToLoop: function(loop, f) {
+            functionToLoop: function (loop, f) {
                 var matchPixCount, endPixCheck, maxPixCount;
 
-                var finishImage = function() {
+                var finishImage = function () {
                     if (!doNotCheckNext && maxPixCount - matchPixCount <= maxPixCount * frameTolerance) {
                         // console.log('removed black frame : ' + f + ' ; frame duration ' + _frames[f].duration);
                     } else {
@@ -3184,7 +3184,7 @@ function WhammyRecorder(mediaStream, config) {
 
                 if (!doNotCheckNext) {
                     var image = new Image();
-                    image.onload = function() {
+                    image.onload = function () {
                         context2d.drawImage(image, 0, 0, canvas.width, canvas.height);
                         var imageData = context2d.getImageData(0, 0, canvas.width, canvas.height);
                         matchPixCount = 0;
@@ -3214,7 +3214,7 @@ function WhammyRecorder(mediaStream, config) {
                     finishImage();
                 }
             },
-            callback: function() {
+            callback: function () {
                 resultFrames = resultFrames.concat(_frames.slice(endCheckFrame));
 
                 if (resultFrames.length <= 0) {
@@ -3239,16 +3239,16 @@ function WhammyRecorder(mediaStream, config) {
      *     video.src = URL.createObjectURL(blob);
      * });
      */
-    this.stop = function(callback) {
+    this.stop = function (callback) {
         isStopDrawing = true;
 
         var _this = this;
         // analyse of all frames takes some time!
-        setTimeout(function() {
+        setTimeout(function () {
             // e.g. dropBlackFrames(frames, 10, 1, 1) - will cut all 10 frames
             // e.g. dropBlackFrames(frames, 10, 0.5, 0.5) - will analyse 10 frames
             // e.g. dropBlackFrames(frames, 10) === dropBlackFrames(frames, 10, 0, 0) - will analyse 10 frames with strict black color
-            dropBlackFrames(whammy.frames, -1, null, null, function(frames) {
+            dropBlackFrames(whammy.frames, -1, null, null, function (frames) {
                 whammy.frames = frames;
 
                 // to display advertisement images!
@@ -3264,7 +3264,7 @@ function WhammyRecorder(mediaStream, config) {
                  *     var blob = recorder.blob;
                  * });
                  */
-                whammy.compile(function(blob) {
+                whammy.compile(function (blob) {
                     _this.blob = blob;
 
                     if (_this.blob.forEach) {
@@ -3290,7 +3290,7 @@ function WhammyRecorder(mediaStream, config) {
      * @example
      * recorder.pause();
      */
-    this.pause = function() {
+    this.pause = function () {
         isPausedRecording = true;
     };
 
@@ -3301,7 +3301,7 @@ function WhammyRecorder(mediaStream, config) {
      * @example
      * recorder.resume();
      */
-    this.resume = function() {
+    this.resume = function () {
         isPausedRecording = false;
 
         if (isStopDrawing) {
@@ -3316,7 +3316,7 @@ function WhammyRecorder(mediaStream, config) {
      * @example
      * recorder.clearRecordedData();
      */
-    this.clearRecordedData = function() {
+    this.clearRecordedData = function () {
         this.pause();
         whammy.frames = [];
     };
@@ -3355,7 +3355,7 @@ if (typeof RecordRTC !== 'undefined') {
  * @see {@link https://github.com/muaz-khan/RecordRTC|RecordRTC Source Code}
  */
 
-var Whammy = (function() {
+var Whammy = (function () {
     // a more abstract-ish API
 
     function WhammyVideo(duration) {
@@ -3374,7 +3374,7 @@ var Whammy = (function() {
      * @param {string} frame - Canvas || Context || image/webp
      * @param {number} duration - Stick a duration (in milliseconds)
      */
-    WhammyVideo.prototype.add = function(frame, duration) {
+    WhammyVideo.prototype.add = function (frame, duration) {
         if ('canvas' in frame) { //CanvasRenderingContext2D
             frame = frame.canvas;
         }
@@ -3522,7 +3522,7 @@ var Whammy = (function() {
             return [{
                 'data': clusterTimecode,
                 'id': 0xe7 // Timecode
-            }].concat(clusterFrames.map(function(webp) {
+            }].concat(clusterFrames.map(function (webp) {
                 var block = makeSimpleBlock({
                     discardable: 0,
                     frame: webp.data.slice(4),
@@ -3574,7 +3574,7 @@ var Whammy = (function() {
         }
 
         function strToBuffer(str) {
-            return new Uint8Array(str.split('').map(function(e) {
+            return new Uint8Array(str.split('').map(function (e) {
                 return e.charCodeAt(0);
             }));
         }
@@ -3655,7 +3655,7 @@ var Whammy = (function() {
                 throw 'TrackNumber > 127 not supported';
             }
 
-            var out = [data.trackNum | 0x80, data.timecode >> 8, data.timecode & 0xff, flags].map(function(e) {
+            var out = [data.trackNum | 0x80, data.timecode >> 8, data.timecode & 0xff, flags].map(function (e) {
                 return String.fromCharCode(e);
             }).join('') + data.frame;
 
@@ -3686,7 +3686,7 @@ var Whammy = (function() {
         }
 
         function getStrLength(string, offset) {
-            return parseInt(string.substr(offset + 4, 4).split('').map(function(i) {
+            return parseInt(string.substr(offset + 4, 4).split('').map(function (i) {
                 var unpadded = i.charCodeAt(0).toString(2);
                 return (new Array(8 - unpadded.length + 1)).join('0') + unpadded;
             }).join(''), 2);
@@ -3714,12 +3714,12 @@ var Whammy = (function() {
 
         function doubleToString(num) {
             return [].slice.call(
-                new Uint8Array((new Float64Array([num])).buffer), 0).map(function(e) {
+                new Uint8Array((new Float64Array([num])).buffer), 0).map(function (e) {
                 return String.fromCharCode(e);
             }).reverse().join('');
         }
 
-        var webm = new ArrayToWebM(frames.map(function(frame) {
+        var webm = new ArrayToWebM(frames.map(function (frame) {
             var webp = parseWebP(parseRIFF(atob(frame.image.slice(23))));
             webp.duration = frame.duration;
             return webp;
@@ -3739,10 +3739,10 @@ var Whammy = (function() {
      *    // blob.size - blob.type
      * });
      */
-    WhammyVideo.prototype.compile = function(callback) {
+    WhammyVideo.prototype.compile = function (callback) {
         var webWorker = processInWebWorker(whammyInWebWorker);
 
-        webWorker.onmessage = function(event) {
+        webWorker.onmessage = function (event) {
             if (event.data.error) {
                 console.error(event.data.error);
                 return;
@@ -3810,7 +3810,7 @@ var DiskStorage = {
      * @example
      * DiskStorage.init();
      */
-    init: function() {
+    init: function () {
         var self = this;
 
         if (typeof indexedDB === 'undefined' || typeof indexedDB.open === 'undefined') {
@@ -3843,7 +3843,7 @@ var DiskStorage = {
             }
 
             function getFromStore(portionName) {
-                transaction.objectStore(self.dataStoreName).get(portionName).onsuccess = function(event) {
+                transaction.objectStore(self.dataStoreName).get(portionName).onsuccess = function (event) {
                     if (self.callback) {
                         self.callback(event.target.result, portionName);
                     }
@@ -3857,14 +3857,14 @@ var DiskStorage = {
 
         request.onerror = self.onError;
 
-        request.onsuccess = function() {
+        request.onsuccess = function () {
             db = request.result;
             db.onerror = self.onError;
 
             if (db.setVersion) {
                 if (db.version !== dbVersion) {
                     var setVersion = db.setVersion(dbVersion);
-                    setVersion.onsuccess = function() {
+                    setVersion.onsuccess = function () {
                         createObjectStore(db);
                         putInDB();
                     };
@@ -3875,7 +3875,7 @@ var DiskStorage = {
                 putInDB();
             }
         };
-        request.onupgradeneeded = function(event) {
+        request.onupgradeneeded = function (event) {
             createObjectStore(event.target.result);
         };
     },
@@ -3891,7 +3891,7 @@ var DiskStorage = {
      *     if(type === 'gifBlob')   { }
      * });
      */
-    Fetch: function(callback) {
+    Fetch: function (callback) {
         this.callback = callback;
         this.init();
 
@@ -3909,7 +3909,7 @@ var DiskStorage = {
      *     gifBlob  : yourGifBlob
      * });
      */
-    Store: function(config) {
+    Store: function (config) {
         this.audioBlob = config.audioBlob;
         this.videoBlob = config.videoBlob;
         this.gifBlob = config.gifBlob;
@@ -3928,7 +3928,7 @@ var DiskStorage = {
      *     alerot( JSON.stringify(error) );
      * };
      */
-    onError: function(error) {
+    onError: function (error) {
         console.error(JSON.stringify(error, null, '\t'));
     },
 
@@ -3983,7 +3983,7 @@ function GifRecorder(mediaStream, config) {
      * @example
      * recorder.record();
      */
-    this.record = function() {
+    this.record = function () {
         if (!isHTMLObject) {
             if (!config.width) {
                 config.width = video.offsetWidth || 320;
@@ -4017,27 +4017,27 @@ function GifRecorder(mediaStream, config) {
         // external library to record as GIF images
         gifEncoder = new GIFEncoder();
 
-        // void setRepeat(int iter) 
-        // Sets the number of times the set of GIF frames should be played. 
+        // void setRepeat(int iter)
+        // Sets the number of times the set of GIF frames should be played.
         // Default is 1; 0 means play indefinitely.
         gifEncoder.setRepeat(0);
 
-        // void setFrameRate(Number fps) 
-        // Sets frame rate in frames per second. 
+        // void setFrameRate(Number fps)
+        // Sets frame rate in frames per second.
         // Equivalent to setDelay(1000/fps).
         // Using "setDelay" instead of "setFrameRate"
         gifEncoder.setDelay(config.frameRate || 200);
 
-        // void setQuality(int quality) 
-        // Sets quality of color quantization (conversion of images to the 
-        // maximum 256 colors allowed by the GIF specification). 
-        // Lower values (minimum = 1) produce better colors, 
-        // but slow processing significantly. 10 is the default, 
-        // and produces good color mapping at reasonable speeds. 
+        // void setQuality(int quality)
+        // Sets quality of color quantization (conversion of images to the
+        // maximum 256 colors allowed by the GIF specification).
+        // Lower values (minimum = 1) produce better colors,
+        // but slow processing significantly. 10 is the default,
+        // and produces good color mapping at reasonable speeds.
         // Values greater than 20 do not yield significant improvements in speed.
         gifEncoder.setQuality(config.quality || 10);
 
-        // Boolean start() 
+        // Boolean start()
         // This writes the GIF Header and returns false if it fails.
         gifEncoder.start();
 
@@ -4047,7 +4047,7 @@ function GifRecorder(mediaStream, config) {
 
         function drawVideoFrame(time) {
             if (isPausedRecording) {
-                return setTimeout(function() {
+                return setTimeout(function () {
                     drawVideoFrame(time);
                 }, 100);
             }
@@ -4098,7 +4098,7 @@ function GifRecorder(mediaStream, config) {
      *     img.src = URL.createObjectURL(blob);
      * });
      */
-    this.stop = function() {
+    this.stop = function () {
         if (lastAnimationFrame) {
             cancelAnimationFrame(lastAnimationFrame);
         }
@@ -4130,7 +4130,7 @@ function GifRecorder(mediaStream, config) {
      * @example
      * recorder.pause();
      */
-    this.pause = function() {
+    this.pause = function () {
         isPausedRecording = true;
     };
 
@@ -4141,7 +4141,7 @@ function GifRecorder(mediaStream, config) {
      * @example
      * recorder.resume();
      */
-    this.resume = function() {
+    this.resume = function () {
         isPausedRecording = false;
     };
 
@@ -4152,7 +4152,7 @@ function GifRecorder(mediaStream, config) {
      * @example
      * recorder.clearRecordedData();
      */
-    this.clearRecordedData = function() {
+    this.clearRecordedData = function () {
         if (!gifEncoder) {
             return;
         }
@@ -4268,13 +4268,13 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
      * @example
      * recorder.record();
      */
-    this.record = function() {
+    this.record = function () {
         isStoppedRecording = false;
         var mixedVideoStream = getMixedVideoStream();
 
         var mixedAudioStream = getMixedAudioStream();
         if (mixedAudioStream) {
-            mixedAudioStream.getAudioTracks().forEach(function(track) {
+            mixedAudioStream.getAudioTracks().forEach(function (track) {
                 mixedVideoStream.addTrack(track);
             });
         }
@@ -4300,14 +4300,14 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
      *     video.src = URL.createObjectURL(blob);
      * });
      */
-    this.stop = function(callback) {
+    this.stop = function (callback) {
         isStoppedRecording = true;
 
         if (!mediaRecorder) {
             return;
         }
 
-        mediaRecorder.stop(function(blob) {
+        mediaRecorder.stop(function (blob) {
             callback(blob);
         });
     };
@@ -4322,7 +4322,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
         self.gainNode.gain.value = 0; // don't hear self
 
         var audioTracksLength = 0;
-        arrayOfMediaStreams.forEach(function(stream) {
+        arrayOfMediaStreams.forEach(function (stream) {
             if (!stream.getAudioTracks().length) {
                 return;
             }
@@ -4339,7 +4339,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
         }
 
         self.audioDestination = self.audioContext.createMediaStreamDestination();
-        audioSources.forEach(function(audioSource) {
+        audioSources.forEach(function (audioSource) {
             audioSource.connect(self.audioDestination);
         });
         return self.audioDestination.stream;
@@ -4350,7 +4350,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
 
     function getMixedVideoStream() {
         // via: @adrian-ber
-        arrayOfMediaStreams.forEach(function(stream) {
+        arrayOfMediaStreams.forEach(function (stream) {
             if (!stream.getVideoTracks().length) {
                 return;
             }
@@ -4394,7 +4394,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
         var videosLength = videos.length;
 
         var fullcanvas = false;
-        videos.forEach(function(video) {
+        videos.forEach(function (video) {
             if (!video.stream) {
                 video.stream = {};
             }
@@ -4473,7 +4473,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
      * @example
      * recorder.pause();
      */
-    this.pause = function() {
+    this.pause = function () {
         if (mediaRecorder) {
             mediaRecorder.pause();
         }
@@ -4486,7 +4486,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
      * @example
      * recorder.resume();
      */
-    this.resume = function() {
+    this.resume = function () {
         if (mediaRecorder) {
             mediaRecorder.resume();
         }
@@ -4499,7 +4499,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
      * @example
      * recorder.clearRecordedData();
      */
-    this.clearRecordedData = function() {
+    this.clearRecordedData = function () {
         videos = [];
         context.clearRect(0, 0, canvas.width, canvas.height);
         isStoppedRecording = false;
@@ -4517,7 +4517,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
      * @example
      * recorder.addStream(MediaStream);
      */
-    this.addStream = function(stream) {
+    this.addStream = function (stream) {
         if (stream instanceof Array && stream.length) {
             stream.forEach(this.addStream);
             return;

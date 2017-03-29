@@ -13,7 +13,7 @@
 getScreenId(function (error, sourceId, screen_constraints) {
     // error    == null || 'permission-denied' || 'not-installed' || 'installed-disabled' || 'not-chrome'
     // sourceId == null || 'string' || 'firefox'
-    
+
     if(sourceId == 'firefox') {
         navigator.mozGetUserMedia(screen_constraints, onSuccess, onFailure);
     }
@@ -21,8 +21,8 @@ getScreenId(function (error, sourceId, screen_constraints) {
 });
 */
 
-(function() {
-    window.getScreenId = function(callback) {
+(function () {
+    window.getScreenId = function (callback) {
         // for Firefox:
         // sourceId == 'firefox'
         // screen_constraints = {...}
@@ -54,8 +54,8 @@ getScreenId(function (error, sourceId, screen_constraints) {
             // this event listener is no more needed
             window.removeEventListener('message', onIFrameCallback);
         }
-		
-		setTimeout(postGetSourceIdMessage, 100);
+
+        setTimeout(postGetSourceIdMessage, 100);
     };
 
     function getScreenConstraints(error, sourceId) {
@@ -79,7 +79,7 @@ getScreenId(function (error, sourceId, screen_constraints) {
     }
 
     function postGetSourceIdMessage() {
-		if (!iframe) {
+        if (!iframe) {
             loadIFrame(postGetSourceIdMessage);
             return;
         }
@@ -97,22 +97,22 @@ getScreenId(function (error, sourceId, screen_constraints) {
     var iframe;
 
     // this function is used in RTCMultiConnection v3
-    window.getScreenConstraints = function(callback) {
-        loadIFrame(function() {
-            getScreenId(function(error, sourceId, screen_constraints) {
+    window.getScreenConstraints = function (callback) {
+        loadIFrame(function () {
+            getScreenId(function (error, sourceId, screen_constraints) {
                 callback(error, screen_constraints.video);
             });
         });
     };
-	
-	function loadIFrame(loadCallback) {
+
+    function loadIFrame(loadCallback) {
         if (iframe) {
             loadCallback();
             return;
         }
 
         iframe = document.createElement('iframe');
-        iframe.onload = function() {
+        iframe.onload = function () {
             iframe.isLoaded = true;
 
             loadCallback();
@@ -121,8 +121,8 @@ getScreenId(function (error, sourceId, screen_constraints) {
         iframe.style.display = 'none';
         (document.body || document.documentElement).appendChild(iframe);
     }
-	
-	window.getChromeExtensionStatus = function(callback) {
+
+    window.getChromeExtensionStatus = function (callback) {
         // for Firefox:
         if (!!navigator.mozGetUserMedia) {
             callback('installed-enabled');
@@ -133,19 +133,19 @@ getScreenId(function (error, sourceId, screen_constraints) {
 
         function onIFrameCallback(event) {
             if (!event.data) return;
-			
-			if (event.data.chromeExtensionStatus) {
+
+            if (event.data.chromeExtensionStatus) {
                 callback(event.data.chromeExtensionStatus);
             }
 
             // this event listener is no more needed
             window.removeEventListener('message', onIFrameCallback);
         }
-		
-		setTimeout(postGetChromeExtensionStatusMessage, 100);
+
+        setTimeout(postGetChromeExtensionStatusMessage, 100);
     };
-	
-	function postGetChromeExtensionStatusMessage() {
+
+    function postGetChromeExtensionStatusMessage() {
         if (!iframe) {
             loadIFrame(postGetChromeExtensionStatusMessage);
             return;
@@ -155,8 +155,8 @@ getScreenId(function (error, sourceId, screen_constraints) {
             setTimeout(postGetChromeExtensionStatusMessage, 100);
             return;
         }
-		
-		iframe.contentWindow.postMessage({
+
+        iframe.contentWindow.postMessage({
             getChromeExtensionStatus: true
         }, '*');
     }

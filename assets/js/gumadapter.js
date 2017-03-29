@@ -3,7 +3,7 @@
 // gumadapter.js
 // https://cdn.webrtc-experiment.com/gumadapter.js
 
-// getUserMedia hacks from git/webrtc/adapter; 
+// getUserMedia hacks from git/webrtc/adapter;
 // removed redundant codes
 // A-to-Zee, all copyrights goes to:
 // https://github.com/webrtc/adapter/blob/master/LICENSE.md
@@ -14,12 +14,12 @@ var webrtcDetectedVersion = null;
 var webrtcMinimumVersion = null;
 
 var webrtcUtils = window.webrtcUtils || {};
-if(!webrtcUtils.enableLogs) {
+if (!webrtcUtils.enableLogs) {
     webrtcUtils.enableLogs = true;
 }
-if(!webrtcUtils.log) {
-    webrtcUtils.log = function() {
-        if(!webrtcUtils.enableLogs) {
+if (!webrtcUtils.log) {
+    webrtcUtils.log = function () {
+        if (!webrtcUtils.enableLogs) {
             return;
         }
 
@@ -32,37 +32,37 @@ if(!webrtcUtils.log) {
     };
 }
 
-if(!webrtcUtils.extractVersion) {
-    webrtcUtils.extractVersion = function(uastring, expr, pos) {
+if (!webrtcUtils.extractVersion) {
+    webrtcUtils.extractVersion = function (uastring, expr, pos) {
         var match = uastring.match(expr);
         return match && match.length >= pos && parseInt(match[pos], 10);
     };
 }
 
 if (typeof window === 'object') {
-  if (window.HTMLMediaElement &&
-    !('srcObject' in window.HTMLMediaElement.prototype)) {
-    // Shim the srcObject property, once, when HTMLMediaElement is found.
-    Object.defineProperty(window.HTMLMediaElement.prototype, 'srcObject', {
-      get: function() {
-        // If prefixed srcObject property exists, return it.
-        // Otherwise use the shimmed property, _srcObject
-        return 'mozSrcObject' in this ? this.mozSrcObject : this._srcObject;
-      },
-      set: function(stream) {
-        if ('mozSrcObject' in this) {
-          this.mozSrcObject = stream;
-        } else {
-          // Use _srcObject as a private property for this shim
-          this._srcObject = stream;
-          // TODO: revokeObjectUrl(this.src) when !stream to release resources?
-          this.src = stream ? URL.createObjectURL(stream) : null;
-        }
-      }
-    });
-  }
-  // Proxy existing globals
-  getUserMedia = window.navigator && window.navigator.getUserMedia;
+    if (window.HTMLMediaElement &&
+        !('srcObject' in window.HTMLMediaElement.prototype)) {
+        // Shim the srcObject property, once, when HTMLMediaElement is found.
+        Object.defineProperty(window.HTMLMediaElement.prototype, 'srcObject', {
+            get: function () {
+                // If prefixed srcObject property exists, return it.
+                // Otherwise use the shimmed property, _srcObject
+                return 'mozSrcObject' in this ? this.mozSrcObject : this._srcObject;
+            },
+            set: function (stream) {
+                if ('mozSrcObject' in this) {
+                    this.mozSrcObject = stream;
+                } else {
+                    // Use _srcObject as a private property for this shim
+                    this._srcObject = stream;
+                    // TODO: revokeObjectUrl(this.src) when !stream to release resources?
+                    this.src = stream ? URL.createObjectURL(stream) : null;
+                }
+            }
+        });
+    }
+    // Proxy existing globals
+    getUserMedia = window.navigator && window.navigator.getUserMedia;
 }
 
 if (typeof window === 'undefined' || !window.navigator) {
@@ -78,13 +78,13 @@ if (typeof window === 'undefined' || !window.navigator) {
     webrtcMinimumVersion = 31;
 
     // getUserMedia constraints shim.
-    getUserMedia = function(constraints, onSuccess, onError) {
-        var constraintsToFF37 = function(c) {
+    getUserMedia = function (constraints, onSuccess, onError) {
+        var constraintsToFF37 = function (c) {
             if (typeof c !== 'object' || c.require) {
                 return c;
             }
             var require = [];
-            Object.keys(c).forEach(function(key) {
+            Object.keys(c).forEach(function (key) {
                 if (key === 'require' || key === 'advanced' || key === 'mediaSource') {
                     return;
                 }
@@ -146,13 +146,13 @@ if (typeof window === 'undefined' || !window.navigator) {
     if (!navigator.mediaDevices) {
         navigator.mediaDevices = {
             getUserMedia: requestUserMedia,
-            addEventListener: function() {},
-            removeEventListener: function() {}
+            addEventListener: function () {},
+            removeEventListener: function () {}
         };
     }
     navigator.mediaDevices.enumerateDevices =
-        navigator.mediaDevices.enumerateDevices || function() {
-            return new Promise(function(resolve) {
+        navigator.mediaDevices.enumerateDevices || function () {
+            return new Promise(function (resolve) {
                 var infos = [{
                     kind: 'audioinput',
                     deviceId: 'default',
@@ -172,8 +172,8 @@ if (typeof window === 'undefined' || !window.navigator) {
         // Work around http://bugzil.la/1169665
         var orgEnumerateDevices =
             navigator.mediaDevices.enumerateDevices.bind(navigator.mediaDevices);
-        navigator.mediaDevices.enumerateDevices = function() {
-            return orgEnumerateDevices().then(undefined, function(e) {
+        navigator.mediaDevices.enumerateDevices = function () {
+            return orgEnumerateDevices().then(undefined, function (e) {
                 if (e.name === 'NotFoundError') {
                     return [];
                 }
@@ -192,12 +192,12 @@ if (typeof window === 'undefined' || !window.navigator) {
     webrtcMinimumVersion = 38;
 
     // getUserMedia constraints shim.
-    var constraintsToChrome = function(c) {
+    var constraintsToChrome = function (c) {
         if (typeof c !== 'object' || c.mandatory || c.optional) {
             return c;
         }
         var cc = {};
-        Object.keys(c).forEach(function(key) {
+        Object.keys(c).forEach(function (key) {
             if (key === 'require' || key === 'advanced' || key === 'mediaSource') {
                 return;
             }
@@ -207,7 +207,7 @@ if (typeof window === 'undefined' || !window.navigator) {
             if (r.exact !== undefined && typeof r.exact === 'number') {
                 r.min = r.max = r.exact;
             }
-            var oldname = function(prefix, name) {
+            var oldname = function (prefix, name) {
                 if (prefix) {
                     return prefix + name.charAt(0).toUpperCase() + name.slice(1);
                 }
@@ -231,7 +231,7 @@ if (typeof window === 'undefined' || !window.navigator) {
                 cc.mandatory = cc.mandatory || {};
                 cc.mandatory[oldname('', key)] = r.exact;
             } else {
-                ['min', 'max'].forEach(function(mix) {
+                ['min', 'max'].forEach(function (mix) {
                     if (r[mix] !== undefined) {
                         cc.mandatory = cc.mandatory || {};
                         cc.mandatory[oldname(mix, key)] = r[mix];
@@ -245,7 +245,7 @@ if (typeof window === 'undefined' || !window.navigator) {
         return cc;
     };
 
-    getUserMedia = function(constraints, onSuccess, onError) {
+    getUserMedia = function (constraints, onSuccess, onError) {
         if (constraints.audio) {
             constraints.audio = constraintsToChrome(constraints.audio);
         }
@@ -266,7 +266,7 @@ if (typeof window === 'undefined' || !window.navigator) {
     // A shim for getUserMedia method on the mediaDevices object.
     // TODO(KaptenJansson) remove once implemented in Chrome stable.
     if (!navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia = function(constraints) {
+        navigator.mediaDevices.getUserMedia = function (constraints) {
             return requestUserMedia(constraints);
         };
     } else {
@@ -275,7 +275,7 @@ if (typeof window === 'undefined' || !window.navigator) {
         // constraints.
         var origGetUserMedia = navigator.mediaDevices.getUserMedia.
         bind(navigator.mediaDevices);
-        navigator.mediaDevices.getUserMedia = function(c) {
+        navigator.mediaDevices.getUserMedia = function (c) {
             webrtcUtils.log('spec:   ' + JSON.stringify(c)); // whitespace for alignment
             c.audio = constraintsToChrome(c.audio);
             c.video = constraintsToChrome(c.video);
@@ -287,12 +287,12 @@ if (typeof window === 'undefined' || !window.navigator) {
     // Dummy devicechange event methods.
     // TODO(KaptenJansson) remove once implemented in Chrome stable.
     if (typeof navigator.mediaDevices.addEventListener === 'undefined') {
-        navigator.mediaDevices.addEventListener = function() {
+        navigator.mediaDevices.addEventListener = function () {
             webrtcUtils.log('Dummy mediaDevices.addEventListener called.');
         };
     }
     if (typeof navigator.mediaDevices.removeEventListener === 'undefined') {
-        navigator.mediaDevices.removeEventListener = function() {
+        navigator.mediaDevices.removeEventListener = function () {
             webrtcUtils.log('Dummy mediaDevices.removeEventListener called.');
         };
     }
@@ -311,7 +311,7 @@ if (typeof window === 'undefined' || !window.navigator) {
 
 // Returns the result of getUserMedia as a Promise.
 function requestUserMedia(constraints) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         getUserMedia(constraints, resolve, reject);
     });
 }
@@ -326,7 +326,7 @@ if (typeof module !== 'undefined') {
     };
 } else if ((typeof require === 'function') && (typeof define === 'function')) {
     // Expose objects and functions when RequireJS is doing the loading.
-    define([], function() {
+    define([], function () {
         return {
             getUserMedia: getUserMedia,
             webrtcDetectedBrowser: webrtcDetectedBrowser,
